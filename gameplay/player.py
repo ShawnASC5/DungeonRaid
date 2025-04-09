@@ -10,5 +10,10 @@ class Player(Entity):
         self.controller = FirstPersonController(**kwargs)
         super().__init__(parent = self.controller)
 
-    def health_damage(self):
-        self.healthBar = Button(bar_color=color.lime.tint(-.25), roundness=.5, max_value=100, value=50, scale=(.5,.1))
+class PlayerHealth(Button):   
+    def __init__(self):
+        pass
+    
+class Inventory(Entity):
+    def __init__(self):
+        pass
