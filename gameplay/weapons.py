@@ -1,20 +1,21 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from player import Player
-from enemies import Enemy
 
 app = Ursina()
 
 class Weapon(Entity):
-    def __init__(self, **kwargs):
+    def __init__(self, controller, **kwargs):
         super().__init__(**kwargs)
+        self.controller = controller
+        self.setupWeapons()
 
-    def weapons(self):
-        self.blade = Entity(
+    def setupWeapons(self):
+        self.knife = Entity(
             parent = self.controller.camera_pivot,
             scale = 0.002,
-            model = 'C:/Users/justi/OneDrive/assets/knife.zip/source/energyblade_clean.blend',
-            texture = 'C:/Users/justi/OneDrive/assets/knife.zip/textures',
+            model = 'assets/knife.zip/source/knife.fbx',
+            texture = 'assets/knife.zip/textures/gltf_embedded_0@channels=G.jpeg',
             position = Vec3(0.7, -1, 1.5),
             rotation = Vec3(0, 170, 0),  
             visible = False)
@@ -22,8 +23,8 @@ class Weapon(Entity):
         self.spear = Entity(
             parent = self.controller.camera_pivot,
             scale = 0.002,
-            model = 'C:/Users/justi/OneDrive/assets/spear.zip/source/spear.fbx',
-            texture = 'C:/Users/justi/OneDrive/assets/spear.zip/textures/St_concept_tex.png',
+            model = 'assets/spear.zip/source/spear.fbx',
+            texture = 'assets/spear.zip/textures/St_concept_tex.png',
             position = Vec3(0.7, -1, 1.5),
             rotation = Vec3(0, 170, 0),
             visible = False
@@ -32,37 +33,28 @@ class Weapon(Entity):
         self.bow = Entity(
             parent = self.controller.camera_pivot,
             scale = 0.002,
-            model = 'C:/Users/justi/AppData/Local/Temp/0de53608-794f-406c-ba93-61029a40d917_bow.zip.917/source/Glowy Magic Bow.zip/Glowy Magic Bow.bin',
-            texture = 'C:/Users/justi/AppData/Local/Temp/0de53608-794f-406c-ba93-61029a40d917_bow.zip.917/textures',
+            model = 'assets/bow.zip/source/lightning-bow-low-poly.fbx',
+            texture = 'assets/bow.zip/textures/bow_diff.png',
             position = Vec3(0.7, -1, 1.5),
             rotation = Vec3(0, 170, 1.5),
             visible = False
         )
 
-        self.fists = Entity(
-            parent = self.controller.camera_pivot,
-            scale = 0.002,
-            model = 'C:/Users/justi/OneDrive/assets/fists.zip/source/Fists_Anim.fbx',
-            texture = 'C:/Users/justi/OneDrive/assets/fists.zip/textures/',
-            position = Vec3(0.7, -1, 1.5),
-            rotation = Vec3(0, 170, 0),
-            visible = False
-        )
-
-        self.weapons = [self.blade, self.spear, self.bow, self.fists]
-        self.current_weapon_index = 0
-        self.current_weapon = self.weapons[self.current_weapon_index]
-        self.switch_weapon()
+        self.weapons = [self.knife, self.spear, self.bow]
+        self.currentWeaponIndex = 0
+        self.currentWeapon = self.weapons[self.currentWeaponIndex]
+        self.currentWeapon.visible = True
+        self.switchWeapon()
 
     def input(self, key):
         if key == '0':
             self.currentWeapon.visible = False
         elif key.isdigit() and 1 <= int(key) <= len(self.weapons):
-            self.switch_weapon(int(key)-1)
-            self.current_weapon.visible = True
+            self.switchWeapon(int(key)-1)
+            self.currentWeapon.visible = True
 
-    def switch_weapon(self, index):
-        self.current_weapon_index = index
+    def switchWeapon(self, index):
+        self.currentWeaponIndex = index
 
     def active(self):
         self.rotation = Vec3(0, 45, 5)

@@ -1,5 +1,6 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
+from gameplay.weapons import Weapon
 
 app = Ursina()
 
@@ -49,6 +50,7 @@ dungeonGround = Entity(model='plane',
 
 player = FirstPersonController()
 player.position = (0,0,0)
+weapon = Weapon(controller = player)
 
 app.run()
 

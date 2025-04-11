@@ -1,18 +1,18 @@
 from ursina import *
-from weapons import Weapon
-from player import Player
+from gameplay.weapons import Weapon
+from gameplay.player import Player
 import random
 
 class LootBox(Entity):
-    def __init__(self, lootTable = None):
+    def __init__(self, lootTable = [], position = Vec3(0, 0, 0)):
         super().__init__(
             model = 'cube',
             color = color.green,
-            texture = 'lootbox.png',
+            texture = None,
             collider = 'box',
-            position = Vec3(0, 0, 0),
+            position = position,
             scale = Vec3(1, 1, 1))
-        self.lootTable = []
+        self.lootTable = lootTable
         self.isOpen = False
 
     #if held_keys('E'), then openBox()
