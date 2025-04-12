@@ -1,24 +1,32 @@
 from ursina import *
-# from particles import Particles
-# from guns import Bullet
-import random
+from ursina.mesh_importer import load_model
+import os
+
 app = Ursina()
- 
-#import random position when we know dimensions of the dungeon
-class Enemy(Entity):
-    def __init__(self, player, move_speed, position = (0,0,0), damage = 10, **kwargs):
-        super().__init__(
-            model = 'quad',
-            texture = "zombieFemaleA.png",
-            position = position,
-            scale = (2,2),
-            **kwargs
-        )        
 
-player = Entity(model='cube', color=color.orange, position=(0,0,0))
-orc = Enemy(player=player, move_speed=1, position=(3,0,0))
+os.chdir(os.path.dirname(__file__))
 
-camera.z = -10
+model_path = 'character.fbx'  # ✅ Make sure this is the Blender-exported FBX 7.4 version
+
+print("Working directory:", os.getcwd())
+print("character_2013.fbx found:", os.path.exists(model_path))
+
+character_model = load_model(model_path)
+
+character = Entity(
+    model=character_model,
+    position=(0, 0, 0),
+    scale=2,
+    collider='box',
+    color=color.white
+)
+
+camera.position = (0, 5, -20)
+camera.look_at(character)
+
+DirectionalLight(y=3, z=2, shadows=True)
+Sky()
+
 app.run()
 
 # def spawnEnemy(self):
