@@ -1,34 +1,28 @@
 from ursina import *
-from ursina.mesh_importer import load_model
-import os
 
-app = Ursina()
+class Enemy(Entity):
+    def _init_(self, player, moveSpeed = 20, position = (0,0,0), **kwargs):
+        super()._init_(
+            model = 'Mutant.fbx',
+            texture = 'white_cube',
+            position = position,
+            collider='box',
+            color = color.white,
+            **kwargs
+        )
 
-os.chdir(os.path.dirname(__file__))
+        self.player = player
+        self.moveSpeed = moveSpeed
+        self.hp = 3
+        self.damage = 1
 
-model_path = 'character.fbx'  # ✅ Make sure this is the Blender-exported FBX 7.4 version
+    
+    def update(self):
+        if distance(self, self.player) > 20:
+            self.position += ((self.player.position + self.random) - self.position).normalized() * self.move_speed * time.dt
 
-print("Working directory:", os.getcwd())
-print("character_2013.fbx found:", os.path.exists(model_path))
-
-character_model = load_model(model_path)
-
-character = Entity(
-    model=character_model,
-    position=(0, 0, 0),
-    scale=2,
-    collider='box',
-    color=color.white
-)
-
-camera.position = (0, 5, -20)
-camera.look_at(character)
-
-DirectionalLight(y=3, z=2, shadows=True)
-Sky()
-
-app.run()
-
+        self.look_at(self.player)
+        self.rotation_z = 0
 # def spawnEnemy(self):
 #     spawnLocation = random.randint(0,100)
 #     self.springEnemy = None
